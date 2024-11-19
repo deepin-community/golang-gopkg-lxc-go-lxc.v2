@@ -1,4 +1,15 @@
 #!/usr/bin/make -f
 
+# Skip the examples in source (they're in doc)
+export DH_GOLANG_EXCLUDES := examples
+export DH_GOLANG_EXCLUDES_ALL := 1
+
 %:
-	dh $@
+	dh $@ --buildsystem=golang --with=golang
+
+# disable tests for now, most require root and a working lxc setup.
+# Some don't, and there are provision to skip the one that do,
+# but the build system is using fakeroot, so it fails.
+# Also, even without root a proper lxc + cgroups setup is needed
+override_dh_auto_test:
+	echo "The testsuite requires a working LXC setup."
